@@ -11,6 +11,11 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    console.log(req) //check some stuff with this bad boy
+    //console.log(req) //check some stuff with this bad boy
     res.send('Some Bullshit')
+});
+
+app.post('/todo', (req, res) => {
+    console.log('Post request received!');
+    res.send('Working');
 });
