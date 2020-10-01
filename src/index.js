@@ -11,6 +11,6 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    console.log(req)
+    //console.log(req) //check some stuff with this bad boy
     res.send('Hello Nugget!')
 });
