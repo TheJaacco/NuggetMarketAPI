@@ -24,7 +24,7 @@ let items = [
         Location: {
          City: "Oulu",
           Country: "Suomi",
-          PostalCode: "95415"
+          PostalCode: "95414"
         },
         Images: "*kuva nuggetista*",
         AskingPrice: "200e",
