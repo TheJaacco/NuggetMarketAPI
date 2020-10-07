@@ -197,4 +197,26 @@ passport.use(new BasicStrategy(
         }
         return done(null, user);
     }
+<<<<<<< HEAD
 ));
+=======
+));
+
+app.post('/registerUser', (req, res) => {
+    if('username' in req.body == false) {
+        res.status(400);
+        res.json({status: "No username"})
+        return;
+    }
+    if('password' in req.body == false) {
+        res.status(400);
+        res.json({status: "No password"})
+        return;
+    }
+    if('email' in req.body == false) {
+        res.status(400);
+        res.json({status: "No email"})
+        return;
+    }
+});
+>>>>>>> 2f7e37b... Started Login part with http basic auth
