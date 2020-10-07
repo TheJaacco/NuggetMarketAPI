@@ -35,22 +35,36 @@ let items = [
       }
 ];
 
-
-
 app.listen(port, () => {
     console.log('API says hello');
 });
 
+// ------------------items part--------------------------------------------
 app.get('/items', (req, res) => {
     res.json(items);
 });
 
-app.get('/user', (req, res) => {
-    res.json(user);
-    res.sendStatus(404);
+app.get('/todos/:id', (req, res) => {
+    const result = todos.find(t => t.id == req.params.id);
+    if(result !== undefined)
+    {
+        res.json(result);
+    }
+    else
+    {
+        res.sendStatus(404);
+    }
 })
 
 app.post('/items', (req, res) => {
     console.log('Post request received!');
     res.send('Working');
 });
+
+//-------------------- User part ----------------------------------------------
+app.get('/user', (req, res) => {
+    res.json(user);
+    res.sendStatus(404);
+})
+
+// -------------------- Login part----------------------------------------------
