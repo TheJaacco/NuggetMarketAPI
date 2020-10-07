@@ -6,7 +6,7 @@ const port = 3000
 
 app.use(bodyParser.json());
 let dateObj = new Date();
-let currTime = dateObj.getDate(); 
+let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getFullYear(); 
 
 let user = [
     {
@@ -17,7 +17,7 @@ let user = [
 
 let items = [
     {
-        Id: "007",
+        id: uuidv4(),
         Title: "Nuggetteja halvalla",
         Description: "Hyväkuntoisia vähän syötyjä nuggetteja halvalla, voin lämmittää lisämaksusta",
         Category: "Ruoka",
@@ -44,8 +44,8 @@ app.get('/items', (req, res) => {
     res.json(items);
 });
 
-app.get('/todos/:id', (req, res) => {
-    const result = todos.find(t => t.id == req.params.id);
+app.get('/items/:id', (req, res) => {
+    const result = items.find(t => t.id == req.params.id);
     if(result !== undefined)
     {
         res.json(result);
@@ -57,8 +57,27 @@ app.get('/todos/:id', (req, res) => {
 })
 
 app.post('/items', (req, res) => {
-    console.log('Post request received!');
-    res.send('Working');
+
+    const newItem = {
+        id: uuidv4(),
+        Title: req.body.Title,
+        Description: req.body.Description,
+        Category: req.body.Category,
+        Location: {
+          City: req.body.Location.City,
+          Country: req.body.Location.Country,
+          PostalCode: req.body.Location.PostalCode,
+        },
+        Images: req.body.Images,
+        AskingPrice: req.body.AskingPrice,
+        DateOfPosting: currTime,
+        DeliveryType: req.body.DeliveryType,
+        SellerName: req.body.SellerName,
+        ContactInformation: req.body.ContactInformation,
+    };
+
+items.push(newItem);
+res.sendStatus(200);
 });
 
 //-------------------- User part ----------------------------------------------
