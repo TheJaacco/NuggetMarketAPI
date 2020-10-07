@@ -11,7 +11,8 @@ let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getF
 let user = [
     {
         id: uuidv4(),
-        passwordSet: false
+        FullName: "Jaakko"
+
     }
 ];
 
@@ -28,7 +29,7 @@ let items = [
         },
         Images: "*kuva nuggetista*",
         AskingPrice: "200e",
-        DateOfPosting: dateObj.getDate(),
+        DateOfPosting: currTime,
         DeliveryType: "Posti",
         SellerName: "Jaakko Nugget",
         ContactInformation: "0400123123"
@@ -40,10 +41,13 @@ app.listen(port, () => {
 });
 
 // ------------------items part--------------------------------------------
+
+// Get all items
 app.get('/items', (req, res) => {
     res.json(items);
 });
-
+ 
+// get spesific item
 app.get('/items/:id', (req, res) => {
     const result = items.find(t => t.id == req.params.id);
     if(result !== undefined)
@@ -55,9 +59,8 @@ app.get('/items/:id', (req, res) => {
         res.sendStatus(404);
     }
 })
-
+// Create new item
 app.post('/items', (req, res) => {
-
     const newItem = {
         id: uuidv4(),
         Title: req.body.Title,
@@ -78,6 +81,33 @@ app.post('/items', (req, res) => {
 
 items.push(newItem);
 res.sendStatus(200);
+});
+// Modify information on item
+app.put('/items/:id', (req, res) =>{
+    const result = items.find(t => t.id == req.params.id);
+    if(result !== undefined)
+    {
+        for(const key in req.body)
+        {
+            result[key] = req.body[key];
+        }
+        res.sendStatus(200)
+    }
+    else{
+        res.sendStatus(404)
+    }
+});
+// Delete item
+app.delete('/items/:id', (req, res)=>{
+    const result = items.find(t => t.id == req.params.id);
+    if(result !== -1)
+    {
+        items.splice(result, 1);
+        res.sendStatus(200);
+    }
+    else{
+        res.sendStatus(404);
+    }
 });
 
 //-------------------- User part ----------------------------------------------
