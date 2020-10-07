@@ -8,11 +8,16 @@ app.use(bodyParser.json());
 let dateObj = new Date();
 let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getFullYear(); 
 
-let user = [
+let users = [
     {
         id: uuidv4(),
-        FullName: "Jaakko"
-
+        FullName: "Mister X",
+        UserName: "JaaccoMura",
+        Email: "NoneOfYerBisness@fuckU.com",
+        Address: "Nugettikuja 6",
+        Country: "Svenska",
+        PhoneNumber: "280357289",
+        Password: "Jaakon homma"
     }
 ];
 
@@ -111,9 +116,65 @@ app.delete('/items/:id', (req, res)=>{
 });
 
 //-------------------- User part ----------------------------------------------
-app.get('/user', (req, res) => {
-    res.json(user);
-    res.sendStatus(404);
+// Get all users
+app.get('/users', (req, res) => {
+    res.json(users);
+});
+ 
+// get spesific user
+app.get('/users/:id', (req, res) => {
+    const result = users.find(t => t.id == req.params.id);
+    if(result !== undefined)
+    {
+        res.json(result);
+    }
+    else
+    {
+        res.sendStatus(404);
+    }
 })
+// Create new user
+app.post('/users', (req, res) => {
+    const newUser = {
+        id: uuidv4(),
+        FullName: req.body.FullName,
+        UserName: req.body.UserName,
+        Email: req.body.Email,
+        Address: req.body.Address,
+        Country: req.body.Country,
+        PhoneNumber: req.body.PhoneNumber,
+        Password: req.body.Password
+    };
+
+users.push(newUser);
+res.sendStatus(200);
+});
+// Modify information on user
+app.put('/users/:id', (req, res) =>{
+    const result = users.find(t => t.id == req.params.id);
+    if(result !== undefined)
+    {
+        for(const key in req.body)
+        {
+            result[key] = req.body[key];
+        }
+        res.sendStatus(200)
+    }
+    else{
+        res.sendStatus(404)
+    }
+});
+// Delete user
+app.delete('/users/:id', (req, res)=>{
+    const result = users.find(t => t.id == req.params.id);
+    if(result !== -1)
+    {
+        users.splice(result, 1);
+        res.sendStatus(200);
+    }
+    else{
+        res.sendStatus(404);
+    }
+});
 
 // -------------------- Login part----------------------------------------------
