@@ -1,6 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcryptjs');
+
 const app = express()
 const port = 3000
 
@@ -178,3 +180,21 @@ app.delete('/users/:id', (req, res)=>{
 });
 
 // -------------------- Login part----------------------------------------------
+//--HTTP Basic Auth--//
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
+
+passport.use(new BasicStrategy(
+    function(username, password, done) {
+        const user = users.getUserByName(username);
+        if(user == undefined) {
+            console.log('Username not found');
+            return done(null, false, { message: "HTTP Basic username not found"});
+        }
+        if(bcrypt.compareSync(password, user.password) == false) {
+            console.log('Password does not match username')
+            return done(null, false, { message: "HTTP Basic password not found"})
+        }
+        return done(null, user);
+    }
+));
