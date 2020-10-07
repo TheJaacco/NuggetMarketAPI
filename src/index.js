@@ -5,6 +5,8 @@ const app = express()
 const port = 3000
 
 app.use(bodyParser.json());
+let dateObj = new Date();
+let currTime = dateObj.getDate(); 
 
 let user = [
     {
@@ -13,13 +15,34 @@ let user = [
     }
 ];
 
+let items = [
+    {
+        Id: "007",
+        Title: "Nuggetteja halvalla",
+        Description: "Hyväkuntoisia vähän syötyjä nuggetteja halvalla, voin lämmittää lisämaksusta",
+        Category: "Ruoka",
+        Location: {
+         City: "Oulu",
+          Country: "Suomi",
+          PostalCode: "95415"
+        },
+        Images: "*kuva nuggetista*",
+        AskingPrice: "200e",
+        DateOfPosting: dateObj.getDate(),
+        DeliveryType: "Posti",
+        SellerName: "Jaakko Nugget",
+        ContactInformation: "0400123123"
+      }
+];
+
+
+
 app.listen(port, () => {
     console.log('API says hello');
 });
 
-app.get('/', (req, res) => {
-    //console.log(req) //check some stuff with this bad boy
-    res.send('Some Bullshit')
+app.get('/items', (req, res) => {
+    res.json(items);
 });
 
 app.get('/user', (req, res) => {
@@ -27,7 +50,7 @@ app.get('/user', (req, res) => {
     res.sendStatus(404);
 })
 
-app.post('/todo', (req, res) => {
+app.post('/items', (req, res) => {
     console.log('Post request received!');
     res.send('Working');
 });
