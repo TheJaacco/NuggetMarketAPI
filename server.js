@@ -14,13 +14,22 @@ let users = [
     {
         id: uuidv4(),
         FullName: "Mister X",
-        UserName: "JaaccoMura",
+        UserName: 'JaaccoMura',
         Email: "NoneOfYerBisness@fuckU.com",
         Address: "Nugettikuja 6",
         Country: "Svenska",
         PhoneNumber: "280357289",
-        Password: "Jaakon homma"
-    }
+        Password: '8e607a4752fa2e59413e5790536f2b42'
+    },
+    {
+    id: uuidv4(),
+    FullName: "",
+    UserName: "tester",
+    Email: "",
+    Address: "",
+    Country: "",
+    Password: '8e607a4752fa2e59413e5790536f2b42' // tester123
+    },
 ];
 let items = [
     {
@@ -190,13 +199,13 @@ const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
 
 passport.use(new BasicStrategy(
-    function(username, password, done) {
-        const user = users.getUserByName(username);
+    function(UserName, Password, done) {
+        const user = users.getUserByName(UserName);
         if(user == undefined) {
             console.log('Username not found');
             return done(null, false, { message: "HTTP Basic username not found"});
         }
-        if(bcrypt.compareSync(password, user.password) == false) {
+        if(bcrypt.compareSync(Password, user.Password) == false) {
             console.log('Password does not match username')
             return done(null, false, { message: "HTTP Basic password not found"})
         }
@@ -204,3 +213,33 @@ passport.use(new BasicStrategy(
     }
 ));
 
+app.get('/httpBasicProtectedResource',
+        passport.authenticate('basic', { session: false }),
+        (req, res) => {
+  res.json({
+    yourProtectedResource: "profit"
+  });
+});
+
+app.post('/registerUser', (req, res) => {
+    if('UserName' in req.body == false) {
+        res.status(400);
+        res.json({status: "No username"})
+        return;
+    }
+    if('Password' in req.body == false) {
+        res.status(400);
+        res.json({status: "No password"})
+        return;
+    }
+    if('Email' in req.body == false) {
+        res.status(400);
+        res.json({status: "No email"})
+        return;
+    }
+
+    const hashPassword = bcrypt.hashSync(req.body.Password, 10);
+    console.log(hashPassword);
+    user.addUser(req.body.UserName, req.body.Email, hashPassword);
+    res.status(201).json({status: "User added"});
+});
