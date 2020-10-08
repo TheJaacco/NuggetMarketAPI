@@ -56,7 +56,7 @@ exports.stop = () =>{
 
 // Get all items
 app.get('/items', (req, res) => {
-    res.json(items);
+    res.json({items});
 });
  
 // get spesific item

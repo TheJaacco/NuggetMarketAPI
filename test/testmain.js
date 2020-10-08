@@ -1,4 +1,4 @@
-let mocha = require('mocha');
+/*let mocha = require('mocha');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server =  require('../src/index'); // or just index 
@@ -22,4 +22,4 @@ describe('Task API' , () => {
 
     //Testing POST
     //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-});
+});*/
