@@ -44,10 +44,44 @@ let items = [
         },
         Images: "*kuva nuggetista*",
         AskingPrice: "200e",
-        DateOfPosting: currTime,
+        DateOfPosting: "2019-06-07",
         DeliveryType: "Posti",
         SellerName: "Jaakko Nugget",
         ContactInformation: "0400123123"
+      },
+      {
+        id: uuidv4(),
+        Title: "Sukkia",
+        Description: "Ei yhtään reikää",
+        Category: "Vaate",
+        Location: {
+         City: "Oulu",
+          Country: "Suomi",
+          PostalCode: "95414"
+        },
+        Images: "",
+        AskingPrice: "25e",
+        DateOfPosting: "2011-01-01",
+        DeliveryType: "Posti",
+        SellerName: "Jaakko Nugget",
+        ContactInformation: "0400123123"
+      },
+      {
+        id: uuidv4(),
+        Title: "Kalsarit",
+        Description: "Hieman likaiset",
+        Category: "Vaate",
+        Location: {
+         City: "Turku",
+          Country: "Suomi",
+          PostalCode: "95414"
+        },
+        Images: "*kuva kalsareista*",
+        AskingPrice: "40e",
+        DateOfPosting: "2017-02-16",
+        DeliveryType: "Posti",
+        SellerName: "Teppo Taneli",
+        ContactInformation: "0400123122"
       }
 ];
 // Functions to start and stop server (for testing)
@@ -130,7 +164,49 @@ app.delete('/items/:id', (req, res)=>{
         res.sendStatus(404);
     }
 });
+//Get items by Category
+app.get('/items/category/:id', (req, res) => {
+    let arr = [];
+    for(let i = 0;i<items.length;i++)
+    {
+        if(items[i].Category === req.params.id)
+        {
+            arr.push(items[i]);
+        }
+    }
+    res.json({arr});
+});
+// get items by date
+app.get('/items/date/:id', (req, res) => {
 
+    function sortByAscending(a, b){
+        return new Date(a.DateOfPosting).getTime() - new Date(b.DateOfPosting).getTime();
+    }
+    function sortByDescending(a, b){
+        return new Date(b.DateOfPosting).getTime() - new Date(a.DateOfPosting).getTime();
+    }
+    if(req.params.id === "ascending")
+    {
+        items.sort(sortByAscending);
+    }
+    if(req.params.id === "descending")
+    {
+        items.sort(sortByDescending);
+    }
+    res.json({items});
+});
+//get items byt location
+app.get('/items/location/:id', (req, res) => {
+    let arr = [];
+    for(let i = 0;i<items.length;i++)
+    {
+        if(items[i].Location.City === req.params.id)
+        {
+            arr.push(items[i]);
+        }
+    }
+    res.json({arr});
+});
 //-------------------- User part ----------------------------------------------
 // Get all users
 app.get('/users', (req, res) => {
