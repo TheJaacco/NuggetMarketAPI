@@ -129,9 +129,7 @@ describe('Modify first item', function() {
   //-------------- Test for DELETE-----------------------------------
 
   describe('Delete first item', function() {
-    after(function() {
-        server.stop();
-      })
+
     it('Should delete first item', async function() {
       await chai.request(apiAddress)
         .delete(putAddres)
@@ -157,3 +155,50 @@ describe('Modify first item', function() {
      })*/
   })
   
+// ----------------- Tests for sorting ----------------------------------------------------------------
+describe('Get items sorted by:', function() {
+    after(function() {
+        server.stop();
+      })
+        it("Sort by city: Turku", async function() {
+            await chai.request(apiAddress)
+            .get('/items/location/Turku')
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+            })
+            .catch(error => {
+                expect.fail(error)
+            })
+         })
+         it("Sort by category: Vaate ", async function() {
+            await chai.request(apiAddress)
+            .get('/items/category/Vaate')
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+                expect(response.body.sortedItems[0].Category).to.equal("Vaate");
+            })
+            .catch(error => {
+                expect.fail(error)
+            })
+         })
+         it("Sort by date: descending", async function() {
+            await chai.request(apiAddress)
+            .get('/items/date/descending')
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+            })
+            .catch(error => {
+                expect.fail(error)
+            })
+         })
+         it("Sort by date: ascending", async function() {
+            await chai.request(apiAddress)
+            .get('/items/date/ascending')
+            .then(response => {
+                expect(response.statusCode).to.equal(200);
+            })
+            .catch(error => {
+                expect.fail(error)
+            })
+         })
+});

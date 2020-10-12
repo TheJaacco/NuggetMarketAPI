@@ -166,15 +166,15 @@ app.delete('/items/:id', (req, res)=>{
 });
 //Get items by Category
 app.get('/items/category/:id', (req, res) => {
-    let arr = [];
+    let sortedItems = [];
     for(let i = 0;i<items.length;i++)
     {
         if(items[i].Category === req.params.id)
         {
-            arr.push(items[i]);
+            sortedItems.push(items[i]);
         }
     }
-    res.json({arr});
+    res.json({sortedItems});
 });
 // get items by date
 app.get('/items/date/:id', (req, res) => {
