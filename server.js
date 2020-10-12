@@ -22,14 +22,14 @@ let users = [
         Password: '8e607a4752fa2e59413e5790536f2b42'
     },
     {
-    id: uuidv4(),
-    FullName: "",
-    UserName: "tester",
-    Email: "",
-    Address: "",
-    Country: "",
-    Password: '8e607a4752fa2e59413e5790536f2b42' // tester123
-    },
+        id: uuidv4(),
+        FullName: "",
+        UserName: "tester",
+        Email: "",
+        Address: "",
+        Country: "",
+        Password: '8e607a4752fa2e59413e5790536f2b42' // tester123
+    }
 ];
 let items = [
     {

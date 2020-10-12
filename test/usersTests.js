@@ -7,11 +7,11 @@ const { v4: uuidv4 } = require('uuid');
 const expect = chai.expect;
 const apiAddress = 'http://localhost:3000';
 
-let firtsItemId = "";
+let firtsUserId = "";
 let putAddres = "";
 
 // -------------- tests for GET ------------------------
-describe('Test get all items', function() {
+describe('Test get all users', function() {
 
     before(function(){
         server.start();
@@ -20,31 +20,31 @@ describe('Test get all items', function() {
     describe('Get statuscode', function() {
         it("Should respond with statuscode 200", async function() {
             await chai.request(apiAddress)
-            .get('/items')
+            .get('/users')
             .then(response => {
                 expect(response.statusCode).to.equal(200);
+                firtsUserId = response.body[0].id;
             })
             .catch(error => {
                 expect.fail(error)
             })
          })
-         it("Should have property: id", async function() {
+         it("Should have property: FullName", async function() {
             await chai.request(apiAddress)
-            .get('/items')
+            .get('/users')
             .then(response => {
-                //console.log(response.body); Uncommet if you want to see items printed and see if test really works
-                firtsItemId = response.body.items[0].id;
-                expect(response.body.items[0]).to.have.a.property('id');
+                //console.log(response.body); //Uncommet if you want to see items printed and see if test really works
+                expect(response.body[0]).to.have.a.property('FullName');
             })
             .catch(error => {
                 expect.fail(error)
             })
          })
-         it("Should have property: Category", async function() {
+         it("Should have property: Email", async function() {
             await chai.request(apiAddress)
-            .get('/items')
+            .get('/users')
             .then(response => {
-                expect(response.body.items[0]).to.have.a.property('Category');
+                expect(response.body[0]).to.have.a.property('Email');
             })
             .catch(error => {
                 expect.fail(error)
@@ -53,26 +53,19 @@ describe('Test get all items', function() {
     });
 });
 // --------------Test for POST--------------------------------
-describe('Post new item', function() {
-    it('Should post new item', async function() {
+describe('Post new user', function() {
+    it('Should post new user', async function() {
       await chai.request(apiAddress)
-        .post('/items')
+        .post('/users')
         .send({
-                id: uuidv4(),
-                Title: "Ilmaa",
-                Description: "Vähän höngittyä",
-                Category: "Oleellinen",
-                Location: {
-                 City: "Turku",
-                  Country: "Suomi",
-                  PostalCode: "815"
-                },
-                Images: "Ilmaa",
-                AskingPrice: "10e",
-                DateOfPosting: "Eilen",
-                DeliveryType: "Posti",
-                SellerName: "Seppo Sebastian",
-                ContactInformation: "0400123123",
+            id: uuidv4(),
+            FullName: "Sepi Testeri",
+            UserName: 'Test44j4',
+            Email: "testi@mai.com",
+            Address: "Testikuja 6",
+            Country: "Somalia",
+            PhoneNumber: "98465498",
+            Password: '8489616516661',
         })
         .then(response => {
           expect(response.status).to.equal(200);
@@ -84,7 +77,7 @@ describe('Post new item', function() {
     // Uncommet if you want to see items printed and see if test really works
     /*it("Print all items", async function() {
         await chai.request(apiAddress)
-        .get('/items')
+        .get('/users')
         .then(response => {
             console.log(response.body);
         })
@@ -95,15 +88,15 @@ describe('Post new item', function() {
   })
 //-------------------------- Test for PUT----------------------------------------------------------------
 
-describe('Modify first item', function() {
+describe('Modify first user', function() {
     before(function() {
-        putAddres = "/items/" + firtsItemId;
+        putAddres = "/users/" + firtsUserId;
       })
-    it('Should modify asking price for first item ', async function() {
+    it('Should modify username for first user ', async function() {
       await chai.request(apiAddress)
         .put(putAddres)
         .send({
-            AskingPrice: "13e"
+            UserName: "ToimiikoTesti"
         })
         .then(response => {
           expect(response.status).to.equal(200);
@@ -113,9 +106,9 @@ describe('Modify first item', function() {
         })
     })
     // Uncomment if you want to see items printed and see if test really works
-    /*it("Print all items", async function() {
+   /* it("Print all items", async function() {
         await chai.request(apiAddress)
-        .get('/items')
+        .get('/users')
         .then(response => {
             console.log(response.body);
         })
@@ -128,11 +121,11 @@ describe('Modify first item', function() {
 
   //-------------- Test for DELETE-----------------------------------
 
-  describe('Delete first item', function() {
+  describe('Delete first user', function() {
     after(function() {
         server.stop();
       })
-    it('Should delete first item', async function() {
+    it('Should delete first user', async function() {
       await chai.request(apiAddress)
         .delete(putAddres)
         .send({
@@ -147,7 +140,7 @@ describe('Modify first item', function() {
     // Uncommet if you want to see items printed and see if test really works
     /*it("Print all items", async function() {
         await chai.request(apiAddress)
-        .get('/items')
+        .get('/users')
         .then(response => {
             console.log(response.body);
         })
@@ -156,4 +149,3 @@ describe('Modify first item', function() {
         })
      })*/
   })
-  
