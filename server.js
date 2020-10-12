@@ -19,9 +19,10 @@ let users = [
         Address: "Nugettikuja 6",
         Country: "Svenska",
         PhoneNumber: "280357289",
-        Password: '8e607a4752fa2e59413e5790536f2b42'
+        Password: "Nugetti"
     },
     {
+<<<<<<< HEAD
         id: uuidv4(),
         FullName: "",
         UserName: "tester",
@@ -30,7 +31,32 @@ let users = [
         Country: "",
         Password: '8e607a4752fa2e59413e5790536f2b42' // tester123
     }
+=======
+    id: uuidv4(),
+    FullName: "Toni Puh",
+    UserName: "Puha123",
+    Email: "puha@seppo.com",
+    Address: "Metsokankaan",
+    Country: "Ruptis",
+    Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+    },
+>>>>>>> a5c1723... Added functionality to login and register user pages
 ];
+
+getUserById: (id) => users.find(u => u.id == id);
+function getUserByName(UserName) {
+    return users.find(u => u.UserName == UserName)  
+}
+
+function addUser(UserName, Email, Password){
+    users.push({
+        id: uuidv4(),
+        UserName,
+        Email,
+        Password
+    });
+}
+
 let items = [
     {
         id: uuidv4(),
@@ -276,7 +302,7 @@ const BasicStrategy = require('passport-http').BasicStrategy;
 
 passport.use(new BasicStrategy(
     function(UserName, Password, done) {
-        const user = users.getUserByName(UserName);
+        const user = getUserByName(UserName);
         if(user == undefined) {
             console.log('Username not found');
             return done(null, false, { message: "HTTP Basic username not found"});
@@ -289,7 +315,7 @@ passport.use(new BasicStrategy(
     }
 ));
 
-app.get('/httpBasicProtectedResource',
+app.get('/login',
         passport.authenticate('basic', { session: false }),
         (req, res) => {
   res.json({
@@ -314,8 +340,8 @@ app.post('/registerUser', (req, res) => {
         return;
     }
 
-    const hashPassword = bcrypt.hashSync(req.body.Password, 10);
+    const hashPassword = bcrypt.hashSync(req.body.Password, 6);
     console.log(hashPassword);
-    user.addUser(req.body.UserName, req.body.Email, hashPassword);
+    addUser(req.body.UserName, req.body.Email, hashPassword);
     res.status(201).json({status: "User added"});
 });
