@@ -8,11 +8,12 @@ const port = 3000
 
 app.use(bodyParser.json());
 let dateObj = new Date();
-let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getFullYear(); 
+let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.getDate(); 
 
 let users = [
     {
         id: uuidv4(),
+<<<<<<< HEAD
         FullName: "Admin",
         UserName: "Admin",
         Email: "admin@nugget.market.com",
@@ -20,6 +21,16 @@ let users = [
         Country: "Suomi",
         PhoneNumber: "669669",
         Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
+=======
+        FullName: "Mister X",
+        UserName: 'JaaccoMura',
+        Email: "NoneOfYerBisness@fuckU.com",
+        Address: "Nugettikuja 6",
+        Country: "Svenska",
+        City: "Turku",
+        Phonenumber: "280357289",
+        Password: "Nugetti"
+>>>>>>> a0a36fa8a5812aa1b3d2b30bf6432cb8e216a559
     },
     {
         id: uuidv4(),
@@ -28,8 +39,15 @@ let users = [
         Email: "puha@seppo.com",
         Address: "Metsokankaan",
         Country: "Ruptis",
+<<<<<<< HEAD
         Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
     },
+=======
+        City: "Oulu",
+        Phonenumber: "56516581",
+        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+        },
+>>>>>>> a0a36fa8a5812aa1b3d2b30bf6432cb8e216a559
 ];
 
 getUserById: (id) => users.find(u => u.id == id);
@@ -210,17 +228,17 @@ app.get('/items/date/:id', (req, res) => {
     }
     res.json({items});
 });
-//get items byt location
-app.get('/items/location/:id', (req, res) => {
-    let arr = [];
+//get items by city
+app.get('/items/city/:id', (req, res) => {
+    let city = [];
     for(let i = 0;i<items.length;i++)
     {
         if(items[i].Location.City === req.params.id)
         {
-            arr.push(items[i]);
+            city.push(items[i]);
         }
     }
-    res.json({arr});
+    res.json({city});
 });
 //-------------------- User part ----------------------------------------------
 // Get all users
