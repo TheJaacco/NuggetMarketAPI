@@ -117,8 +117,11 @@ exports.stop = () =>{
 
 // start page
 app.get('/', (req, res) => {
-    res.send("Welcome to NuggetMarket, best marketplace on galaxy!\n" +
-    '<br><br>Documentation: <a href="https://app.swaggerhub.com/apis-docs/Tahkamura/nugget-market/1.0#/" target="_blank"> Here</a');
+    res.send("<b>Welcome to NuggetMarket, best marketplace on galaxy!</b>" +
+    '<br><br>Documentation: <a href="https://app.swaggerhub.com/apis-docs/Tahkamura/nugget-market/1.0#/" target="_blank">Here</a>' +
+    '<br><br><b>Admin login information</b><br><br>Username: Admin<br>Password: Adminpassword' +
+    '<br><br>To login as user, use postman to create new user(POST) or use existing user information and then try to <br>example create new item with postman by choosing basic authentication and adding yor newly created(or existing) username and password.'
+    );
 });
 
 // Get all items
