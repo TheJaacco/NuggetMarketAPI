@@ -13,22 +13,22 @@ let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getF
 let users = [
     {
         id: uuidv4(),
-        FullName: "Mister X",
-        UserName: 'JaaccoMura',
-        Email: "NoneOfYerBisness@fuckU.com",
-        Address: "Nugettikuja 6",
-        Country: "Svenska",
-        PhoneNumber: "280357289",
-        Password: "Nugetti"
+        FullName: "Admin",
+        UserName: "Admin",
+        Email: "admin@nugget.market.com",
+        Address: "internet",
+        Country: "Suomi",
+        PhoneNumber: "669669",
+        Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
     },
     {
-    id: uuidv4(),
-    FullName: "Toni Puh",
-    UserName: "Puha123",
-    Email: "puha@seppo.com",
-    Address: "Metsokankaan",
-    Country: "Ruptis",
-    Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+        id: uuidv4(),
+        FullName: "Toni Puh",
+        UserName: "Puha123",
+        Email: "puha@seppo.com",
+        Address: "Metsokankaan",
+        Country: "Ruptis",
+        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
     },
 ];
 
@@ -308,7 +308,7 @@ app.get('/login',
         passport.authenticate('basic', { session: false }),
         (req, res) => {
   res.json({
-    yourProtectedResource: "profit"
+    resourse: "Logged in successfully"
   });
 });
 
