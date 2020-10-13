@@ -213,17 +213,17 @@ app.get('/items/date/:id', (req, res) => {
     }
     res.json({items});
 });
-//get items byt location
-app.get('/items/location/:id', (req, res) => {
-    let arr = [];
+//get items by city
+app.get('/items/city/:id', (req, res) => {
+    let city = [];
     for(let i = 0;i<items.length;i++)
     {
         if(items[i].Location.City === req.params.id)
         {
-            arr.push(items[i]);
+            city.push(items[i]);
         }
     }
-    res.json({arr});
+    res.json({city});
 });
 //-------------------- User part ----------------------------------------------
 // Get all users
