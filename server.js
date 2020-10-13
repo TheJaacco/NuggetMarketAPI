@@ -10,9 +10,30 @@ app.use(bodyParser.json());
 let dateObj = new Date();
 let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.getDate(); 
 
+// -------------------- Login part----------------------------------------------
+//--HTTP Basic Auth--//
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
+
+passport.use(new BasicStrategy(
+    function(UserName, Password, done) {
+        const user = getUserByName(UserName);
+        if(user == undefined) {
+            console.log('Username not found');
+            return done(null, false, { message: "HTTP Basic username not found"});
+        }
+        if(bcrypt.compareSync(Password, user.Password) == false) {
+            console.log('Password does not match username')
+            return done(null, false, { message: "HTTP Basic password not found"})
+        }
+        return done(null, user);
+    }
+));
+
 let users = [
     {
         id: uuidv4(),
+<<<<<<< HEAD
         FullName: "Mister X",
         UserName: 'JaaccoMura',
         Email: "NoneOfYerBisness@fuckU.com",
@@ -21,6 +42,15 @@ let users = [
         City: "Turku",
         Phonenumber: "280357289",
         Password: "Nugetti"
+=======
+        FullName: "Admin",
+        UserName: "Admin",
+        Email: "admin@nugget.market.com",
+        Address: "internet",
+        Country: "Suomi",
+        PhoneNumber: "669669",
+        Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
+>>>>>>> 851661c... Admin and User logins, moved auth to top
     },
     {
         id: uuidv4(),
@@ -180,15 +210,17 @@ app.put('/items/:id', (req, res) =>{
     }
 });
 // Delete item
-app.delete('/items/:id', (req, res)=>{
-    const result = items.find(t => t.id == req.params.id);
-    if(result !== -1)
-    {
-        items.splice(result, 1);
-        res.sendStatus(200);
-    }
-    else{
-        res.sendStatus(404);
+app.delete('/items/:id', passport.authenticate('basic', { session: false }), (req, res)=>{
+    if(req.user.UserName === "Admin"){
+        const result = items.find(t => t.id == req.params.id);
+        if(result !== -1)
+        {
+            items.splice(result, 1);
+            res.sendStatus(200);
+        }
+        else{
+            res.sendStatus(404);
+        }
     }
 });
 //Get items by Category
@@ -236,12 +268,30 @@ app.get('/items/city/:id', (req, res) => {
 });
 //-------------------- User part ----------------------------------------------
 // Get all users
-app.get('/users', (req, res) => {
-    res.json(users);
+app.get('/users', passport.authenticate('basic', { session: false }), (req, res) => {
+    console.log("logged as: " + req.user.UserName)
+    if(req.user.UserName === "Admin"){
+        res.json(users);
+    }
+    
 });
  
-// get spesific user
-app.get('/users/:id', (req, res) => {
+// Get specific user as Admin
+app.get('/users/:id', passport.authenticate('basic', { session: false }), (req, res) => {
+    if(req.user.UserName === "Admin"){
+        const result = users.find(t => t.id == req.params.id);
+        if(result !== undefined)
+        {
+            res.json(result);
+        }
+        else
+        {
+            res.sendStatus(404);
+        }
+    }
+})
+// Get own user as user
+app.get('/users/:id', passport.authenticate('basic', { session: false }), (req, res) => {
     const result = users.find(t => t.id == req.params.id);
     if(result !== undefined)
     {
@@ -253,7 +303,7 @@ app.get('/users/:id', (req, res) => {
     }
 })
 // Create new user
-app.post('/users', (req, res) => {
+app.post('/users', passport.authenticate('basic', { session: false }), (req, res) => {
     const newUser = {
         id: uuidv4(),
         FullName: req.body.FullName,
@@ -269,7 +319,7 @@ users.push(newUser);
 res.sendStatus(200);
 });
 // Modify information on user
-app.put('/users/:id', (req, res) =>{
+app.put('/users/:id', passport.authenticate('basic', { session: false }), (req, res) =>{
     const result = users.find(t => t.id == req.params.id);
     if(result !== undefined)
     {
@@ -284,18 +334,20 @@ app.put('/users/:id', (req, res) =>{
     }
 });
 // Delete user
-app.delete('/users/:id', (req, res)=>{
-    const result = users.find(t => t.id == req.params.id);
-    if(result !== -1)
-    {
-        users.splice(result, 1);
-        res.sendStatus(200);
-    }
-    else{
-        res.sendStatus(404);
+app.delete('/users/:id', passport.authenticate('basic', { session: false }), (req, res)=>{
+    if(req.user.UserName === "Admin"){
+        const result = users.find(t => t.id == req.params.id);
+        if(result !== -1)
+        {
+            users.splice(result, 1);
+            res.sendStatus(200);
+        }
+        else{
+            res.sendStatus(404);
+        }
     }
 });
-
+/*
 // -------------------- Login part----------------------------------------------
 //--HTTP Basic Auth--//
 const passport = require('passport');
@@ -315,6 +367,7 @@ passport.use(new BasicStrategy(
         return done(null, user);
     }
 ));
+*/
 
 app.get('/login',
         passport.authenticate('basic', { session: false }),
@@ -346,3 +399,24 @@ app.post('/registerUser', (req, res) => {
     addUser(req.body.UserName, req.body.Email, hashPassword);
     res.status(201).json({status: "User added"});
 });
+
+// Check if Admin
+function isAdmin(req, res, next) {
+    if (req.isAuthenticated()){
+        if(req.body.UserName == "Admin"){
+            next();
+        }     
+    }
+}
+
+//Check if normal user
+function isUser(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();  
+    }
+    else{
+        res.json({
+            resourse: "Auth failed"
+          });
+    }
+}
