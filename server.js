@@ -52,52 +52,52 @@ function addUser(UserName, Email, Password){
 let items = [
     {
         id: uuidv4(),
-        Title: "Nuggetteja halvalla",
-        Description: "Hyväkuntoisia vähän syötyjä nuggetteja halvalla, voin lämmittää lisämaksusta",
-        Category: "Ruoka",
+        Title: "Chicken nuggets for cheap!",
+        Description: "Good nuggets, just little bit eaten, can heat it up for you for extra price!",
+        Category: "Food",
         Location: {
          City: "Oulu",
-          Country: "Suomi",
+          Country: "Finland",
           PostalCode: "95414"
         },
-        Images: "*kuva nuggetista*",
+        Images: "*URL for nugget*",
         AskingPrice: "200e",
         DateOfPosting: "2019-06-07",
-        DeliveryType: "Posti",
+        DeliveryType: "Post",
         SellerName: "Jaakko Nugget",
         ContactInformation: "0400123123"
       },
       {
         id: uuidv4(),
-        Title: "Sukkia",
-        Description: "Ei yhtään reikää",
-        Category: "Vaate",
+        Title: "Socks",
+        Description: "Not any holes(not even that where you put your feet in)",
+        Category: "Clothing",
         Location: {
          City: "Oulu",
-          Country: "Suomi",
+          Country: "Finland",
           PostalCode: "95414"
         },
         Images: "",
         AskingPrice: "25e",
         DateOfPosting: "2011-01-01",
-        DeliveryType: "Posti",
+        DeliveryType: "Pickup only",
         SellerName: "Jaakko Nugget",
         ContactInformation: "0400123123"
       },
       {
         id: uuidv4(),
-        Title: "Kalsarit",
-        Description: "Hieman likaiset",
-        Category: "Vaate",
+        Title: "Underwear (men)",
+        Description: "Little dirty",
+        Category: "Clothing",
         Location: {
          City: "Turku",
-          Country: "Suomi",
+          Country: "Finland",
           PostalCode: "95414"
         },
-        Images: "*kuva kalsareista*",
+        Images: "*Pic of tighty whities*",
         AskingPrice: "40e",
         DateOfPosting: "2017-02-16",
-        DeliveryType: "Posti",
+        DeliveryType: "Post",
         SellerName: "Teppo Taneli",
         ContactInformation: "0400123122"
       }
@@ -114,6 +114,24 @@ exports.stop = () =>{
 }
 
 // ------------------items part--------------------------------------------
+
+// start page
+app.get('/', (req, res) => {
+    res.send("Welcome to NuggetMarket, best marketplace on galaxy!\n" +
+    "To get all items: http://34.205.17.201/items/\n" +
+    "To get item by id: http://34.205.17.201/items/id\n" +
+    "To get items by city: http://34.205.17.201/items/city/Oulu\n" +
+    "To get item by category: http://34.205.17.201/items/category/Clothing\n" +
+    "To get item by ascending/descending date: http://34.205.17.201/items/date/ascending\n" +
+    "To POST new item(user login required): http://34.205.17.201/items/\n" +
+    "To modify(PUT) item (user login required): http://34.205.17.201/items/id\n" +
+    "To DELETE item(user/admin login required): http://34.205.17.201/items/id\n" +
+    "To get all users(admin login required): http://34.205.17.201/users/\n" +
+    "To get spesific user(user/admin login required): http://34.205.17.201/users/\n" +
+    "To POST new user: http://34.205.17.201/users/\n" +
+    "To modify(PUT) user (user login required): http://34.205.17.201/users/id\n" +
+    "To DELETE user (user/admin login required): http://34.205.17.201/users/id\n");
+});
 
 // Get all items
 app.get('/items', (req, res) => {
