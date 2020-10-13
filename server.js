@@ -8,7 +8,7 @@ const port = 3000
 
 app.use(bodyParser.json());
 let dateObj = new Date();
-let currTime = dateObj.getDate() + "." + dateObj.getMonth() + "." + dateObj.getFullYear(); 
+let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.getDate(); 
 
 let users = [
     {
