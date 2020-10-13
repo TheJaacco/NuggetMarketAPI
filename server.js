@@ -118,19 +118,19 @@ exports.stop = () =>{
 // start page
 app.get('/', (req, res) => {
     res.send("Welcome to NuggetMarket, best marketplace on galaxy!\n" +
-    "To get all items: http://34.205.17.201/items/\n" +
-    "To get item by id: http://34.205.17.201/items/id\n" +
-    "To get items by city: http://34.205.17.201/items/city/Oulu\n" +
-    "To get item by category: http://34.205.17.201/items/category/Clothing\n" +
-    "To get item by ascending/descending date: http://34.205.17.201/items/date/ascending\n" +
-    "To POST new item(user login required): http://34.205.17.201/items/\n" +
-    "To modify(PUT) item (user login required): http://34.205.17.201/items/id\n" +
-    "To DELETE item(user/admin login required): http://34.205.17.201/items/id\n" +
-    "To get all users(admin login required): http://34.205.17.201/users/\n" +
-    "To get spesific user(user/admin login required): http://34.205.17.201/users/\n" +
-    "To POST new user: http://34.205.17.201/users/\n" +
-    "To modify(PUT) user (user login required): http://34.205.17.201/users/id\n" +
-    "To DELETE user (user/admin login required): http://34.205.17.201/users/id\n");
+    "<br><br>To get all items: http://34.205.17.201/items/\n" +
+    "<br>To get item by id: http://34.205.17.201/items/id\n" +
+    "<br>To get items by city: http://34.205.17.201/items/city/Oulu\n" +
+    "<br>To get item by category: http://34.205.17.201/items/category/Clothing\n" +
+    "<br>To get item by ascending/descending date: http://34.205.17.201/items/date/ascending\n" +
+    "<br>To POST new item(user login required): http://34.205.17.201/items/\n" +
+    "<br>To modify(PUT) item (user login required): http://34.205.17.201/items/id\n" +
+    "<br>To DELETE item(user/admin login required): http://34.205.17.201/items/id\n" +
+    "<br>To get all users(admin login required): http://34.205.17.201/users/\n" +
+    "<br>To get spesific user(user/admin login required): http://34.205.17.201/users/\n" +
+    "<br>To POST new user: http://34.205.17.201/users/\n" +
+    "<br>To modify(PUT) user (user login required): http://34.205.17.201/users/id\n" +
+    "<br>To DELETE user (user/admin login required): http://34.205.17.201/users/id\n");
 });
 
 // Get all items
