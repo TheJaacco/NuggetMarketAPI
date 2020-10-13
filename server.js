@@ -13,6 +13,15 @@ let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.get
 let users = [
     {
         id: uuidv4(),
+<<<<<<< HEAD
+        FullName: "Admin",
+        UserName: "Admin",
+        Email: "admin@nugget.market.com",
+        Address: "internet",
+        Country: "Suomi",
+        PhoneNumber: "669669",
+        Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
+=======
         FullName: "Mister X",
         UserName: 'JaaccoMura',
         Email: "NoneOfYerBisness@fuckU.com",
@@ -21,6 +30,7 @@ let users = [
         City: "Turku",
         Phonenumber: "280357289",
         Password: "Nugetti"
+>>>>>>> a0a36fa8a5812aa1b3d2b30bf6432cb8e216a559
     },
     {
         id: uuidv4(),
@@ -29,10 +39,15 @@ let users = [
         Email: "puha@seppo.com",
         Address: "Metsokankaan",
         Country: "Ruptis",
+<<<<<<< HEAD
+        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+    },
+=======
         City: "Oulu",
         Phonenumber: "56516581",
         Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
         },
+>>>>>>> a0a36fa8a5812aa1b3d2b30bf6432cb8e216a559
 ];
 
 getUserById: (id) => users.find(u => u.id == id);
@@ -329,7 +344,7 @@ app.get('/login',
         passport.authenticate('basic', { session: false }),
         (req, res) => {
   res.json({
-    yourProtectedResource: "profit"
+    resourse: "Logged in successfully"
   });
 });
 
