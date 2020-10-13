@@ -18,18 +18,21 @@ let users = [
         Email: "NoneOfYerBisness@fuckU.com",
         Address: "Nugettikuja 6",
         Country: "Svenska",
-        PhoneNumber: "280357289",
+        City: "Turku",
+        Phonenumber: "280357289",
         Password: "Nugetti"
     },
     {
-    id: uuidv4(),
-    FullName: "Toni Puh",
-    UserName: "Puha123",
-    Email: "puha@seppo.com",
-    Address: "Metsokankaan",
-    Country: "Ruptis",
-    Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
-    },
+        id: uuidv4(),
+        FullName: "Toni Puh",
+        UserName: "Puha123",
+        Email: "puha@seppo.com",
+        Address: "Metsokankaan",
+        Country: "Ruptis",
+        City: "Oulu",
+        Phonenumber: "56516581",
+        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+        },
 ];
 
 getUserById: (id) => users.find(u => u.id == id);
