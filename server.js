@@ -33,7 +33,6 @@ passport.use(new BasicStrategy(
 let users = [
     {
         id: uuidv4(),
-<<<<<<< HEAD
         FullName: "Mister X",
         UserName: 'JaaccoMura',
         Email: "NoneOfYerBisness@fuckU.com",
@@ -42,15 +41,17 @@ let users = [
         City: "Turku",
         Phonenumber: "280357289",
         Password: "Nugetti"
-=======
+    },
+    {
+        id:uuidv4(),
         FullName: "Admin",
         UserName: "Admin",
         Email: "admin@nugget.market.com",
         Address: "internet",
         Country: "Suomi",
+        City: "AdminCity",
         PhoneNumber: "669669",
         Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
->>>>>>> 851661c... Admin and User logins, moved auth to top
     },
     {
         id: uuidv4(),
