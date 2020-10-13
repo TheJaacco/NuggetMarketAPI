@@ -22,16 +22,6 @@ let users = [
         Password: "Nugetti"
     },
     {
-<<<<<<< HEAD
-        id: uuidv4(),
-        FullName: "",
-        UserName: "tester",
-        Email: "",
-        Address: "",
-        Country: "",
-        Password: '8e607a4752fa2e59413e5790536f2b42' // tester123
-    }
-=======
     id: uuidv4(),
     FullName: "Toni Puh",
     UserName: "Puha123",
@@ -40,7 +30,6 @@ let users = [
     Country: "Ruptis",
     Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
     },
->>>>>>> a5c1723... Added functionality to login and register user pages
 ];
 
 getUserById: (id) => users.find(u => u.id == id);
