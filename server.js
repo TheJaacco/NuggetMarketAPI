@@ -187,7 +187,7 @@ app.post('/items',passport.authenticate('basic', { session: false }), (req, res)
         AskingPrice: req.body.AskingPrice,
         DateOfPosting: currTime,
         DeliveryType: req.body.DeliveryType,
-        SellerName: req.body.SellerName,
+        SellerName: req.user.UserName,
         ContactInformation: req.body.ContactInformation,
         Owner: req.user.id
     };
