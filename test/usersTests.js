@@ -9,6 +9,7 @@ const apiAddress = 'http://localhost:3000';
 
 let firtsUserId = "";
 let putAddres = "";
+let lastUserAddres =""
 
 // -------------- tests for GET ------------------------
 describe('Test get all users', function() {
@@ -21,9 +22,11 @@ describe('Test get all users', function() {
         it("Should respond with statuscode 200", async function() {
             await chai.request(apiAddress)
             .get('/users')
+            .auth('Admin', 'Adminpassword')
             .then(response => {
                 expect(response.statusCode).to.equal(200);
                 firtsUserId = response.body[0].id;
+                lastUserAddres ='/users/' + response.body[2].id;
             })
             .catch(error => {
                 expect.fail(error)
@@ -32,8 +35,9 @@ describe('Test get all users', function() {
          it("Should have property: FullName", async function() {
             await chai.request(apiAddress)
             .get('/users')
+            .auth('Admin', 'Adminpassword')
             .then(response => {
-                //console.log(response.body); //Uncommet if you want to see items printed and see if test really works
+                //console.log(response.body); //Uncommet if you want to see users printed and see if test really works
                 expect(response.body[0]).to.have.a.property('FullName');
             })
             .catch(error => {
@@ -43,6 +47,7 @@ describe('Test get all users', function() {
          it("Should have property: Email", async function() {
             await chai.request(apiAddress)
             .get('/users')
+            .auth('Admin', 'Adminpassword')
             .then(response => {
                 expect(response.body[0]).to.have.a.property('Email');
             })
@@ -74,7 +79,7 @@ describe('Post new user', function() {
           expect.fail(error)
         })
     })
-    // Uncommet if you want to see items printed and see if test really works
+    // Uncommet if you want to see users printed and see if test really works
     /*it("Print all items", async function() {
         await chai.request(apiAddress)
         .get('/users')
@@ -95,6 +100,7 @@ describe('Modify first user', function() {
     it('Should modify username for first user ', async function() {
       await chai.request(apiAddress)
         .put(putAddres)
+        .auth('JaaccoMura', 'Murica')
         .send({
             UserName: "ToimiikoTesti"
         })
@@ -105,10 +111,11 @@ describe('Modify first user', function() {
           expect.fail(error)
         })
     })
-    // Uncomment if you want to see items printed and see if test really works
-   /* it("Print all items", async function() {
+    // Uncomment if you want to see users printed and see if test really works
+   /*it("Print all users", async function() {
         await chai.request(apiAddress)
         .get('/users')
+        .auth('Admin', 'Adminpassword')
         .then(response => {
             console.log(response.body);
         })
@@ -121,13 +128,14 @@ describe('Modify first user', function() {
 
   //-------------- Test for DELETE-----------------------------------
 
-  describe('Delete first user', function() {
+  describe('Delete third user', function() {
     after(function() {
         server.stop();
       })
-    it('Should delete first user', async function() {
+    it('Should delete third user', async function() {
       await chai.request(apiAddress)
-        .delete(putAddres)
+        .delete(lastUserAddres)
+        .auth('Puha123', 'Murica')
         .send({
         })
         .then(response => {
@@ -137,7 +145,7 @@ describe('Modify first user', function() {
           expect.fail(error)
         })
     })
-    // Uncommet if you want to see items printed and see if test really works
+    // Uncommet if you want to see users printed and see if test really works
     /*it("Print all items", async function() {
         await chai.request(apiAddress)
         .get('/users')

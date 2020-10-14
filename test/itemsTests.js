@@ -57,6 +57,7 @@ describe('Post new item', function() {
     it('Should post new item', async function() {
       await chai.request(apiAddress)
         .post('/items')
+        .auth('JaaccoMura', 'Murica')
         .send({
                 id: uuidv4(),
                 Title: "Ilmaa",
@@ -102,6 +103,7 @@ describe('Modify first item', function() {
     it('Should modify asking price for first item ', async function() {
       await chai.request(apiAddress)
         .put(putAddres)
+        .auth('JaaccoMura', 'Murica')
         .send({
             AskingPrice: "13e"
         })
@@ -133,6 +135,7 @@ describe('Modify first item', function() {
     it('Should delete first item', async function() {
       await chai.request(apiAddress)
         .delete(putAddres)
+        .auth('JaaccoMura', 'Murica')
         .send({
         })
         .then(response => {
@@ -162,7 +165,7 @@ describe('Get items sorted by:', function() {
       })
         it("Sort by city: Turku", async function() {
             await chai.request(apiAddress)
-            .get('/items/location/Turku')
+            .get('/items/city/Turku')
             .then(response => {
                 expect(response.statusCode).to.equal(200);
             })
@@ -170,12 +173,12 @@ describe('Get items sorted by:', function() {
                 expect.fail(error)
             })
          })
-         it("Sort by category: Vaate ", async function() {
+         it("Sort by category: Clothing ", async function() {
             await chai.request(apiAddress)
-            .get('/items/category/Vaate')
+            .get('/items/category/Clothing')
             .then(response => {
                 expect(response.statusCode).to.equal(200);
-                expect(response.body.sortedItems[0].Category).to.equal("Vaate");
+                expect(response.body.sortedItems[0].Category).to.equal("Clothing");
             })
             .catch(error => {
                 expect.fail(error)

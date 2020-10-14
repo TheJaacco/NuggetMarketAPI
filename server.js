@@ -8,7 +8,10 @@ const port = 3000
 
 app.use(bodyParser.json());
 let dateObj = new Date();
-let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.getDate(); 
+let currTime = dateObj.getFullYear() +"-" +dateObj.getMonth() +"-" + dateObj.getDate();
+let user0 = uuidv4();
+let user1 = uuidv4();
+let user2 = uuidv4();
 
 // -------------------- Login part----------------------------------------------
 //--HTTP Basic Auth--//
@@ -23,27 +26,32 @@ passport.use(new BasicStrategy(
             return done(null, false, { message: "HTTP Basic username not found"});
         }
         if(bcrypt.compareSync(Password, user.Password) == false) {
-            console.log('Password does not match username')
+            console.log('Password does not match username');
             return done(null, false, { message: "HTTP Basic password not found"})
         }
         return done(null, user);
+
     }
 ));
 
+function getUserByName(UserName) {
+    return users.find(u => u.UserName == UserName)  
+}
+
 let users = [
     {
-        id: uuidv4(),
-        FullName: "Mister X",
+        id: user0,
+        FullName: "MisterX",
         UserName: 'JaaccoMura',
         Email: "NoneOfYerBisness@fuckU.com",
         Address: "Nugettikuja 6",
         Country: "Svenska",
         City: "Turku",
         Phonenumber: "280357289",
-        Password: "Nugetti"
+        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
     },
     {
-        id:uuidv4(),
+        id: user1,
         FullName: "Admin",
         UserName: "Admin",
         Email: "admin@nugget.market.com",
@@ -54,7 +62,7 @@ let users = [
         Password: "$2a$06$Wau95gszbzDUqg/AsHT54uaKv5Yoc7OQwju7hVAYQQ8az58BKC9AO" // Adminpassword
     },
     {
-        id: uuidv4(),
+        id: user2,
         FullName: "Toni Puh",
         UserName: "Puha123",
         Email: "puha@seppo.com",
@@ -65,20 +73,6 @@ let users = [
         Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
         },
 ];
-
-getUserById: (id) => users.find(u => u.id == id);
-function getUserByName(UserName) {
-    return users.find(u => u.UserName == UserName)  
-}
-
-function addUser(UserName, Email, Password){
-    users.push({
-        id: uuidv4(),
-        UserName,
-        Email,
-        Password
-    });
-}
 
 let items = [
     {
@@ -96,7 +90,8 @@ let items = [
         DateOfPosting: "2019-06-07",
         DeliveryType: "Post",
         SellerName: "Jaakko Nugget",
-        ContactInformation: "0400123123"
+        ContactInformation: "0400123123",
+        Owner: user0
       },
       {
         id: uuidv4(),
@@ -113,7 +108,8 @@ let items = [
         DateOfPosting: "2011-01-01",
         DeliveryType: "Pickup only",
         SellerName: "Jaakko Nugget",
-        ContactInformation: "0400123123"
+        ContactInformation: "0400123123",
+        Owner: user2
       },
       {
         id: uuidv4(),
@@ -130,7 +126,8 @@ let items = [
         DateOfPosting: "2017-02-16",
         DeliveryType: "Post",
         SellerName: "Teppo Taneli",
-        ContactInformation: "0400123122"
+        ContactInformation: "0400123122",
+        Owner: user0
       }
 ];
 // Functions to start and stop server (for testing)
@@ -163,17 +160,15 @@ app.get('/items', (req, res) => {
 // get spesific item
 app.get('/items/:id', (req, res) => {
     const result = items.find(t => t.id == req.params.id);
-    if(result !== undefined)
-    {
+    if(result !== undefined){
         res.json(result);
     }
-    else
-    {
+    else{
         res.sendStatus(404);
     }
 })
 // Create new item
-app.post('/items', (req, res) => {
+app.post('/items',passport.authenticate('basic', { session: false }), (req, res) => {
     const newItem = {
         id: uuidv4(),
         Title: req.body.Title,
@@ -190,32 +185,51 @@ app.post('/items', (req, res) => {
         DeliveryType: req.body.DeliveryType,
         SellerName: req.body.SellerName,
         ContactInformation: req.body.ContactInformation,
+        Owner: req.user.id
     };
 
 items.push(newItem);
 res.sendStatus(200);
 });
 // Modify information on item
-app.put('/items/:id', (req, res) =>{
+app.put('/items/:id',passport.authenticate('basic', { session: false }), (req, res) =>{
     const result = items.find(t => t.id == req.params.id);
-    if(result !== undefined)
-    {
-        for(const key in req.body)
-        {
-            result[key] = req.body[key];
+    const owner = items.find(t => t.id == req.params.id);
+    if(req.user.UserName === "Admin"){
+        if(result !== undefined){
+            for(const key in req.body){
+                result[key] = req.body[key];
+            }
+            res.sendStatus(200)
         }
-        res.sendStatus(200)
+        else{
+            res.sendStatus(404)
+        }
+    }
+    if(req.user.id === owner.Owner ){
+        if(result !== undefined)
+        {
+            for(const key in req.body)
+            {
+                result[key] = req.body[key];
+            }
+            res.sendStatus(200)
+        }
+        else{
+            res.sendStatus(404)
+        }
     }
     else{
-        res.sendStatus(404)
+        res.sendStatus(401);
     }
+
 });
 // Delete item
 app.delete('/items/:id', passport.authenticate('basic', { session: false }), (req, res)=>{
+    const result = items.findIndex(t => t.id == req.params.id);
+    const owner = items.find(t => t.id == req.params.id);
     if(req.user.UserName === "Admin"){
-        const result = items.find(t => t.id == req.params.id);
-        if(result !== -1)
-        {
+        if(result !== -1){
             items.splice(result, 1);
             res.sendStatus(200);
         }
@@ -223,14 +237,24 @@ app.delete('/items/:id', passport.authenticate('basic', { session: false }), (re
             res.sendStatus(404);
         }
     }
+    if(req.user.id === owner.Owner ){
+        if(result !== -1){
+            items.splice(result, 1);
+            res.sendStatus(200);
+        }
+        else{
+            res.sendStatus(404);
+        }
+    }
+    else{
+        res.sendStatus(401);
+    }
 });
 //Get items by Category
 app.get('/items/category/:id', (req, res) => {
     let sortedItems = [];
-    for(let i = 0;i<items.length;i++)
-    {
-        if(items[i].Category === req.params.id)
-        {
+    for(let i = 0;i<items.length;i++){
+        if(items[i].Category === req.params.id){
             sortedItems.push(items[i]);
         }
     }
@@ -245,12 +269,10 @@ app.get('/items/date/:id', (req, res) => {
     function sortByDescending(a, b){
         return new Date(b.DateOfPosting).getTime() - new Date(a.DateOfPosting).getTime();
     }
-    if(req.params.id === "ascending")
-    {
+    if(req.params.id === "ascending"){
         items.sort(sortByAscending);
     }
-    if(req.params.id === "descending")
-    {
+    if(req.params.id === "descending"){
         items.sort(sortByDescending);
     }
     res.json({items});
@@ -258,10 +280,8 @@ app.get('/items/date/:id', (req, res) => {
 //get items by city
 app.get('/items/city/:id', (req, res) => {
     let city = [];
-    for(let i = 0;i<items.length;i++)
-    {
-        if(items[i].Location.City === req.params.id)
-        {
+    for(let i = 0;i<items.length;i++){
+        if(items[i].Location.City === req.params.id){
             city.push(items[i]);
         }
     }
@@ -274,37 +294,38 @@ app.get('/users', passport.authenticate('basic', { session: false }), (req, res)
     if(req.user.UserName === "Admin"){
         res.json(users);
     }
+    else{
+        res.sendStatus(401);
+    }
     
 });
  
-// Get specific user as Admin
+// Get specific user as Admin/ logged user own info
 app.get('/users/:id', passport.authenticate('basic', { session: false }), (req, res) => {
+    const result = users.find(t => t.id == req.params.id);
     if(req.user.UserName === "Admin"){
-        const result = users.find(t => t.id == req.params.id);
-        if(result !== undefined)
-        {
+        if(result !== undefined){
             res.json(result);
         }
-        else
-        {
+        else{
             res.sendStatus(404);
         }
     }
-})
-// Get own user as user
-app.get('/users/:id', passport.authenticate('basic', { session: false }), (req, res) => {
-    const result = users.find(t => t.id == req.params.id);
-    if(result !== undefined)
-    {
-        res.json(result);
+    if(req.user.id === req.params.id ){
+        if(result !== undefined){
+            res.json(result);
+        }
+        else{
+            res.sendStatus(404);
+        }
     }
-    else
-    {
-        res.sendStatus(404);
+    else{
+        res.sendStatus(401);
     }
 })
+
 // Create new user
-app.post('/users', passport.authenticate('basic', { session: false }), (req, res) => {
+app.post('/users', (req, res) => {
     const newUser = {
         id: uuidv4(),
         FullName: req.body.FullName,
@@ -322,24 +343,31 @@ res.sendStatus(200);
 // Modify information on user
 app.put('/users/:id', passport.authenticate('basic', { session: false }), (req, res) =>{
     const result = users.find(t => t.id == req.params.id);
-    if(result !== undefined)
-    {
-        for(const key in req.body)
-        {
-            result[key] = req.body[key];
+    if(req.user.UserName === "Admin"){
+        if(result !== undefined){
+            for(const key in req.body){
+                result[key] = req.body[key];
+            }
+            res.sendStatus(200)
         }
-        res.sendStatus(200)
+    }
+    if(req.user.id === req.params.id ){
+        if(result !== undefined){
+            for(const key in req.body){
+                result[key] = req.body[key];
+            }
+            res.sendStatus(200)
+        }
     }
     else{
-        res.sendStatus(404)
+        res.sendStatus(401);
     }
 });
 // Delete user
 app.delete('/users/:id', passport.authenticate('basic', { session: false }), (req, res)=>{
+    const result = users.findIndex(t => t.id == req.params.id);
     if(req.user.UserName === "Admin"){
-        const result = users.find(t => t.id == req.params.id);
-        if(result !== -1)
-        {
+        if(result !== -1){
             users.splice(result, 1);
             res.sendStatus(200);
         }
@@ -347,77 +375,18 @@ app.delete('/users/:id', passport.authenticate('basic', { session: false }), (re
             res.sendStatus(404);
         }
     }
-});
-/*
-// -------------------- Login part----------------------------------------------
-//--HTTP Basic Auth--//
-const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
-
-passport.use(new BasicStrategy(
-    function(UserName, Password, done) {
-        const user = getUserByName(UserName);
-        if(user == undefined) {
-            console.log('Username not found');
-            return done(null, false, { message: "HTTP Basic username not found"});
+    if(req.user.id === req.params.id ){
+        if(result !== -1){
+            users.splice(result, 1);
+            res.sendStatus(200);
         }
-        if(bcrypt.compareSync(Password, user.Password) == false) {
-            console.log('Password does not match username')
-            return done(null, false, { message: "HTTP Basic password not found"})
+        else{
+            res.sendStatus(404);
         }
-        return done(null, user);
-    }
-));
-*/
-
-app.get('/login',
-        passport.authenticate('basic', { session: false }),
-        (req, res) => {
-  res.json({
-    resourse: "Logged in successfully"
-  });
-});
-
-app.post('/registerUser', (req, res) => {
-    if('UserName' in req.body == false) {
-        res.status(400);
-        res.json({status: "No username"})
-        return;
-    }
-    if('Password' in req.body == false) {
-        res.status(400);
-        res.json({status: "No password"})
-        return;
-    }
-    if('Email' in req.body == false) {
-        res.status(400);
-        res.json({status: "No email"})
-        return;
-    }
-
-    const hashPassword = bcrypt.hashSync(req.body.Password, 6);
-    console.log(hashPassword);
-    addUser(req.body.UserName, req.body.Email, hashPassword);
-    res.status(201).json({status: "User added"});
-});
-
-// Check if Admin
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated()){
-        if(req.body.UserName == "Admin"){
-            next();
-        }     
-    }
-}
-
-//Check if normal user
-function isUser(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();  
     }
     else{
-        res.json({
-            resourse: "Auth failed"
-          });
+        res.sendStatus(401);
     }
-}
+});
+
+
