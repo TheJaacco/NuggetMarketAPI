@@ -48,7 +48,7 @@ let users = [
         Country: "Svenska",
         City: "Turku",
         Phonenumber: "280357289",
-        Password: "$2a$06$BY/CLNfLX7oOw9e/8X8pq.oLX2cHYuYSfB9lGceEPw78VrDQ32kYC" // Murica
+        Password: bcrypt.hashSync("Salasana",10)
     },
     {
         id: user1,
@@ -63,10 +63,10 @@ let users = [
     },
     {
         id: user2,
-        FullName: "Toni Puh",
-        UserName: "Puha123",
+        FullName: "Tester test",
+        UserName: "Tester",
         Email: "puha@seppo.com",
-        Address: "Metsokankaan",
+        Address: "TestAlley 10",
         Country: "Ruptis",
         City: "Oulu",
         Phonenumber: "56516581",
@@ -89,7 +89,7 @@ let items = [
         AskingPrice: "200e",
         DateOfPosting: "2019-06-07",
         DeliveryType: "Post",
-        SellerName: "Jaakko Nugget",
+        SellerName: "MisterX",
         ContactInformation: "0400123123",
         Owner: user0
       },
@@ -107,7 +107,7 @@ let items = [
         AskingPrice: "25e",
         DateOfPosting: "2011-01-01",
         DeliveryType: "Pickup only",
-        SellerName: "Jaakko Nugget",
+        SellerName: "Tester test",
         ContactInformation: "0400123123",
         Owner: user2
       },
@@ -125,7 +125,7 @@ let items = [
         AskingPrice: "40e",
         DateOfPosting: "2017-02-16",
         DeliveryType: "Post",
-        SellerName: "Teppo Taneli",
+        SellerName: "MisterX",
         ContactInformation: "0400123122",
         Owner: user0
       }
@@ -148,7 +148,11 @@ app.get('/', (req, res) => {
     res.send("<b>Welcome to NuggetMarket, best marketplace on galaxy!</b>" +
     '<br><br>Documentation: <a href="https://app.swaggerhub.com/apis-docs/Tahkamura/nugget-market/1.0#/" target="_blank">Here</a>' +
     '<br><br><b>Admin login information</b><br><br>Username: Admin<br>Password: Adminpassword' +
-    '<br><br>To login as user, use postman to create new user(POST) or use existing user information and then try to <br>example create new item with postman by choosing basic authentication and adding yor newly created(or existing) username and password.'
+    '<br><br><b>User 1 login information</b><br>Username: JaaccoMura<br>Password: Salasana' +
+    '<br><br><b>User 1 login information</b><br>Username: Tester<br>Password: Murica' +
+    '<br><br><b>Item owners</b><br>First item(Nuggets): JaaccoMura<br>Second item(Socks): Tester<br>Third item(Underwear): JaaccoMura<br>Fourth item: you did that!' +
+    '<br><br>To login as user, use postman to create new user(POST) or use existing user information and then try to <br>example create new item with postman by choosing basic authentication and adding yor newly created(or existing) username and password.' +
+    '<br><br>Browser will remember your login information so use postman to test different users'
     );
 });
 
@@ -334,7 +338,7 @@ app.post('/users', (req, res) => {
         Address: req.body.Address,
         Country: req.body.Country,
         PhoneNumber: req.body.PhoneNumber,
-        Password: req.body.Password
+        Password: bcrypt.hashSync(req.body.Password,10)
     };
 
 users.push(newUser);
