@@ -1,3 +1,5 @@
+// Created by Toni Puhakka & Jaakko Laihiainen
+
 const express = require('express')
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
@@ -149,10 +151,12 @@ app.get('/', (req, res) => {
     '<br><br>Documentation: <a href="https://app.swaggerhub.com/apis-docs/Tahkamura/nugget-market/1.0#/" target="_blank">Here</a>' +
     '<br><br><b>Admin login information</b><br><br>Username: Admin<br>Password: Adminpassword' +
     '<br><br><b>User 1 login information</b><br>Username: JaaccoMura<br>Password: Salasana' +
-    '<br><br><b>User 1 login information</b><br>Username: Tester<br>Password: Murica' +
+    '<br><br><b>User 2 login information</b><br>Username: Tester<br>Password: Murica' +
     '<br><br><b>Item owners</b><br>First item(Nuggets): JaaccoMura<br>Second item(Socks): Tester<br>Third item(Underwear): JaaccoMura<br>Fourth item: you did that!' +
+    '<br><br>To get user information, go to http://34.205.17.201/users/ with your login auth and server gives you your user information'+
     '<br><br>To login as user, use postman to create new user(POST) or use existing user information and then try to <br>example create new item with postman by choosing basic authentication and adding yor newly created(or existing) username and password.' +
-    '<br><br>Browser will remember your login information so use postman to test different users'
+    '<br><br>Browser will remember your login information so use postman to test different users'+
+    '<br><br><br>Creators<br>Toni Puhakka<br>Jaakko Laihiainen<br>TVT18SPO'
     );
 });
 
@@ -295,8 +299,12 @@ app.get('/items/city/:id', (req, res) => {
 // Get all users
 app.get('/users', passport.authenticate('basic', { session: false }), (req, res) => {
     console.log("logged as: " + req.user.UserName)
+    const result = users.find(t => t.UserName == req.user.UserName);
     if(req.user.UserName === "Admin"){
         res.json(users);
+    }
+    if(req.user.UserName === result.UserName){
+        res.json(result);
     }
     else{
         res.sendStatus(401);
