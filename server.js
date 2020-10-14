@@ -45,7 +45,7 @@ let users = [
         id: user0,
         FullName: "MisterX",
         UserName: 'JaaccoMura',
-        Email: "NoneOfYerBisness@fuckU.com",
+        Email: "NoneOfYerBisness@hotmail.com",
         Address: "Nugettikuja 6",
         Country: "Svenska",
         City: "Turku",
